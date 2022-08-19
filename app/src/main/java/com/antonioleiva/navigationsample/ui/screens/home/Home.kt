@@ -1,29 +1,49 @@
 package com.antonioleiva.navigationsample.ui.screens.home
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.compose.rememberNavController
+import com.antonioleiva.navigationsample.ui.screens.Navigation
 import com.antonioleiva.navigationsample.ui.screens.Screen
 
+enum class NavItem(val icon: ImageVector, val title: String) {
+    HOME(Icons.Default.Home, "Home"),
+    SEARCH(Icons.Default.Search, "Search"),
+    FAVORITE(Icons.Default.Favorite, "Favorite"),
+    SETTINGS(Icons.Default.Settings, "Settings")
+}
+
 @Composable
-fun Home(onNavigate: () -> Unit) {
+fun Home() {
+    val navController = rememberNavController()
+
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Navigation Sample") }) }
+        topBar = { TopAppBar(title = { Text("Navigation Sample") }) },
+        bottomBar = {
+            BottomNavigation {
+                NavItem.values().forEach { navItem ->
+                    BottomNavigationItem(
+                        selected = navItem.ordinal == 0,
+                        onClick = { navController.navigate(navItem.title) },
+                        icon = { Icon(navItem.icon, navItem.title) },
+                        label = { Text(navItem.title) })
+                }
+            }
+        }
+
     ) { padding ->
         Screen(
             modifier = Modifier.padding(padding)
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Button(onClick = onNavigate) {
-                    Text("Navigate to Detail")
-                }
-            }
+            Navigation(navController)
         }
     }
 }
