@@ -1,4 +1,4 @@
-package com.antonioleiva.navigationsample.ui
+package com.antonioleiva.navigationsample.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
