@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.antonioleiva.navigationsample.ui.screens.Navigation
 import com.antonioleiva.navigationsample.ui.screens.Screen
@@ -32,7 +33,15 @@ fun Home() {
                 NavItem.values().forEach { navItem ->
                     BottomNavigationItem(
                         selected = navItem.ordinal == 0,
-                        onClick = { navController.navigate(navItem.title) },
+                        onClick = {
+                            navController.navigate(navItem.title) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         icon = { Icon(navItem.icon, navItem.title) },
                         label = { Text(navItem.title) })
                 }
