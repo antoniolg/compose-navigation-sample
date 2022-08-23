@@ -2,25 +2,14 @@ package com.antonioleiva.navigationsample.ui.screens.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
-import com.antonioleiva.navigationsample.ui.screens.Navigation
 import com.antonioleiva.navigationsample.ui.screens.Screen
-
-enum class NavItem(val icon: ImageVector, val title: String) {
-    HOME(Icons.Default.Home, "Home"),
-    SEARCH(Icons.Default.Search, "Search"),
-    FAVORITE(Icons.Default.Favorite, "Favorite"),
-    SETTINGS(Icons.Default.Settings, "Settings")
-}
+import com.antonioleiva.navigationsample.ui.screens.navigation.BottomNavItem
+import com.antonioleiva.navigationsample.ui.screens.navigation.Navigation
 
 @Composable
 fun Home() {
@@ -30,11 +19,12 @@ fun Home() {
         topBar = { TopAppBar(title = { Text("Navigation Sample") }) },
         bottomBar = {
             BottomNavigation {
-                NavItem.values().forEach { navItem ->
+                BottomNavItem.values().forEach { navItem ->
+                    val navItemTitle = stringResource(navItem.title)
                     BottomNavigationItem(
                         selected = navItem.ordinal == 0,
                         onClick = {
-                            navController.navigate(navItem.title) {
+                            navController.navigate(navItem.feature.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
@@ -42,8 +32,8 @@ fun Home() {
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(navItem.icon, navItem.title) },
-                        label = { Text(navItem.title) })
+                        icon = { Icon(navItem.icon, navItemTitle) },
+                        label = { Text(navItemTitle) })
                 }
             }
         }
